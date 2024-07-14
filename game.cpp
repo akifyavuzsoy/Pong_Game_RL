@@ -126,6 +126,8 @@ void game::gameLoop()
     // Reinforcement learning ile paddle'ı kontrol et
     rl->update(ball);
 
+
+
     // Bilgisayar paddle'ının topa doğru hareket etmesini sağla
     if (ball->y() < computerPaddle->y()) {
         computerPaddle->setPos(computerPaddle->x(), computerPaddle->y() - PADDLE_VELOCITY); // Yukarı hareket et
