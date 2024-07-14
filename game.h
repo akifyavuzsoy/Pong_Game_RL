@@ -10,6 +10,9 @@
 #include "ball.h"
 #include "ReinforcementLearning.h"
 
+#define MAJOR_VERSION 01
+#define MINOR_VERSION 02
+
 #define PADDLE_VELOCITY 8
 #define GRAPHICS_WIDTH 750
 #define GRAPHICS_HEIGHT 550
