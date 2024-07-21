@@ -175,6 +175,7 @@ void game::gameLoop()
         rl->rl_Reset_F = 0;
     }
 
+
     if (epoch >= 100) {
         rl->saveModel("model.txt"); // Modeli kaydet
         gameTimer->stop();
