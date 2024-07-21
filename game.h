@@ -55,6 +55,7 @@ private:
     void setupScene();
     void startGame();
     void updateScore();
+    void resetScore();
     void resetGame();
 
 // Reinforment Learning:

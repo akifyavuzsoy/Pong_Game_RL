@@ -10,6 +10,11 @@
 #include <QHash>
 #include <QString>
 
+#define REWARD_GAIN 5
+#define PENALTY_GAIN 20
+#define N_POINT_THRESHOLD -40
+#define P_POINT_THRESHOLD 200
+
 class ReinforcementLearning
 {
 public:
@@ -19,6 +24,8 @@ public:
     void reward();
     void saveModel(const QString &filename);
 
+    uint8_t rl_Reset_F;
+
 private:
     Paddle *paddle;
     QMap<QString, double> qTable;
@@ -27,6 +34,13 @@ private:
     QString getState(Ball *ball);
     QString lastState;
     QString lastAction;
+
+    int Point;
+    int rewardPoints;
+    int penaltyPoints;
+    const int rewardThreshold = 100;
+    const int penaltyThreshold = -100;
+    void rl_reset();
 };
 
 #endif // REINFORCEMENTLEARNING_H

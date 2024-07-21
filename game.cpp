@@ -1,6 +1,7 @@
 #include "game.h"
 #include "ui_game.h"
 #include <QDebug>
+#include <qrandom.h>
 
 game::game(QWidget *parent)
     : QDialog(parent)
@@ -84,9 +85,20 @@ void game::updateScore()
     computerScoreText->setPlainText(QString::number(computerScore));
 }
 
+void game::resetScore()
+{
+    playerScore = 0;
+    computerScore = 0;
+}
+
 void game::resetGame()
 {
-    ball->setPos(GRAPHICS_WIDTH/2, GRAPHICS_HEIGHT/2); // Topu yeniden ortala
+    // Ortalarda rastgele bir noktada başlat
+    int x = QRandomGenerator::global()->bounded(GRAPHICS_WIDTH/2 - 100, GRAPHICS_WIDTH/2 + 100);
+    int y = QRandomGenerator::global()->bounded(GRAPHICS_HEIGHT/2 - 100, GRAPHICS_HEIGHT/2 + 100);
+
+    ball->setPos(x, y);
+    //ball->setPos(GRAPHICS_WIDTH/2, GRAPHICS_HEIGHT/2); // Topu yeniden ortala
     playerPaddle->setPos(SPACE, GRAPHICS_HEIGHT/2);
     computerPaddle->setPos(GRAPHICS_WIDTH-PADDLE_WIDTH-SPACE, GRAPHICS_HEIGHT/2);
     ball->setXVelocity(-ball->getXVelocity()); // Topun yönünü değiştir
@@ -142,11 +154,25 @@ void game::gameLoop()
         rl->penalize(); // Ceza ver
         resetGame();
 
-    } else if (ball->x() + ball->rect().width() >= scene->width()) {
+    }
+    else if (ball->x() + ball->rect().width() >= scene->width()) {
         playerScore++;
         updateScore();
-        rl->reward(); // Ödül ver
         resetGame();
+        // TODO: Ödül ver...
+    }
+
+    // playerPaddle topla buluşursa +5 puan ödül alır..
+    if (ball->collidesWithItem(playerPaddle)) {
+        rl->reward(); // Ödül ver
+    }
+
+    // Reinforment Leaning classında reset alırsa (belli ir ödül veya ceza thresholdun dışına çıkarsa) scoreda sıfırlayacak..
+    if(rl->rl_Reset_F)
+    {
+        resetScore();
+        updateScore();
+        rl->rl_Reset_F = 0;
     }
 
     if (epoch >= 100) {
